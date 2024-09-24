@@ -1,11 +1,12 @@
-import express from 'express';
-import cors from 'cors';
-// import { client, db, taskCollections } from './database.mjs';
-
+const express = require('express');
+const cors = require('cors');
+// require('./config/db');
 const app = express();
 const port = process.env.PORT || 5000;
+const userRoutes = require('./routes/userRoutes');
 
 // app.use(cors());
 app.use(express.json());
+app.use('/api/v1', userRoutes);
 
 app.listen(port, () => console.log('Server is running on port : ', port));
