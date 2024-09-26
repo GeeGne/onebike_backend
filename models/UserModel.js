@@ -43,13 +43,13 @@ class User  {
     }
   }
 
-  static async create (fullName, email, passwordHash, phone) {
+  static async create (name, email, passwordHash, phone) {
     try {
       const sql = 
       'INSERT INTO Users (full_name, email, password_hash, phone) VALUES (?, ?, ? ,?)';
-      const [result] = await db.query(sql, [fullName, email, passwordHash, phone]);
+      const [result] = await db.query(sql, [name, email, passwordHash, phone]);
   
-      const [newUser] = await db.query('SELECT * FROM Users WHERE id = ?', result.insertId);
+      const [[newUser]] = await db.query('SELECT * FROM Users WHERE id = ?', result.insertId);
       return newUser;
     } catch (err) {
       console.error('Error: unable to create new user: ', err)
@@ -60,19 +60,36 @@ class User  {
   static async signIn ({email, password}) {
     try {
 
-      const sql = 'SELECT * FROM Users WHERE email = ?';
-      const [[getUser]] = await db.query(sql, [email]);
-      if (!getUser) throw new Error('Invalid email or password');
+      // const sql = 'SELECT * FROM Users WHERE email = ?';
+      // const [[getUser]] = await db.query(sql, [email]);
+      // if (!getUser) throw new Error('Invalid email or password');
 
-      const storedHash = getUser.password_hash;
+      const user = getUser(email);
+      if (!user) throw new Error('Invalid email or password');
+
+      const storedHash = user.password_hash;
       const verifyPassword = await bcrypt.compare(password, storedHash);
       if (!verifyPassword) throw new Error('Invalid email or password');
 
-      return this.sanatizeUser(getUser);
+      return this.sanatizeUser(user);
     } catch (err) {
       console.error('coudln\'t verify user: ', err);
       throw new Error ('Error verifying user: ' + err.message);
     }
+  }
+
+  static async getUser (email) {
+    try {
+      const sql = 'SELECT * FROM Users WHERE email = ?';
+      const [[getUser]] = await db.query(sql, [email]);
+      if (!getUser) throw new Error('Invalid email or password');
+
+      return getUser;
+    } catch (err) {
+      console.error('couldn\'t get user: ', err);
+      throw new Error ('counldn\'t get user: ', err.message)
+    }
+
   }
 
   static sanatizeUser (user) {
