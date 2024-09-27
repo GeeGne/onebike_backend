@@ -63,7 +63,7 @@ class User  {
   static async signIn ({email, password}) {
     try {
 
-      const user = await this.getUserData(email);
+      const user = await this.getByEmail(email);
       if (!user) throw new Error('Invalid email or password');
 
       const storedHash = user.password_hash;
@@ -77,7 +77,7 @@ class User  {
     }
   }
 
-  static async getUserData (email) {
+  static async getByEmail (email) {
     try {
       const sql = 'SELECT * FROM Users WHERE email = ?';
       const [[getUser]] = await db.query(sql, [email]);
@@ -91,9 +91,40 @@ class User  {
 
   }
 
+  static async getById (id) {
+    try {
+      const sql = 'SELECT * FROM Users WHERE id = ?';
+      const [[getUser]] = await db.query(sql, [id]);
+      if (!getUser) throw new Error('Invalid email or password');
+
+      return getUser;
+    } catch (err) {
+      console.error('couldn\'t get user: ', err);
+      throw new Error ('counldn\'t get user: ' + err.message)
+    }
+
+  }
+
+  static async updateProfile ({id, full_name, phone, address_details, second_address, notes}) {
+    try {
+      const sql = 
+      'UPDATE Users SET full_name = ?, phone = ?, address_details = ?, second_address = ?, notes = ?  WHERE id = ?';
+      const updatedUser = await db.query(sql, [full_name, phone, address_details, second_address, notes, id])
+      if (!updatedUser) throw new Error ('failed to update');
+
+      const user = await this.getById(id);
+      if (!user) throw new Error ('failed to get user profile')
+
+      return this.sanatizeUser(user);
+    } catch (err) {
+      console.error('Error while updating user info: ', err.message);
+      throw new Error ('Error while updating user info: ' + err.message)
+    }
+  }
+
   static sanatizeUser (user) {
     const {id, full_name, email, role, address_details, second_address, notes, is_active} = user;
-    return {id, full_name, email, role, address_details, second_address, notes, is_active};
+    return {id: String(id), full_name, email, role, address_details, second_address, notes, is_active};
   }
 }
 

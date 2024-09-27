@@ -6,8 +6,8 @@ const { checkAuth, admin, me } = require('../middleware/authMiddleware');
 router.route('/')
   .get(checkAuth, admin, userController.getAllUsers);
 
-router.route('/user/profile')
-  .put(checkAuth, me, userController.updateUser);
+router.route('/user/profile/:id')
+  .put(checkAuth, me, userController.updateUserProfile);
 
 router.route('/signout')
   .post(userController.signUserOut);

@@ -15,16 +15,16 @@ function checkAuth(req, res, next) {
 function admin (req, res, next) {
   const user = req.user;
   if (user.role !== 'admin' && user.role !== 'owner') {
-    return res.status(403).json({ message: 'permission ungranted' }) ;
+    return res.status(403).json({ message: 'Permission ungranted' }) ;
   } 
   next();
 }
 
 function me (req, res, next) {
-  const {id: tokenId } = req.user;
-  const { id } = req.body;
+  const { id: tokenId } = req.user;
+  const  userId = Number(req.params.id);
 
-  if (tokenId !== id) return res.status(401).json( { message: 'permission is forbidden'});
+  if (tokenId !== userId) return res.status(403).json( { message: 'Permission ungranted' });
   next();
 }
 

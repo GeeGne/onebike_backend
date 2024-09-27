@@ -65,15 +65,26 @@ const userController = {
     res.clearCookie('jwt_token');
     res.status(200).json({ message: 'Cookie removed' })
   },
-  async updateUserInfo () {
-
+  async updateUserProfile (req, res) {
+    try {
+      const updatedData = req.body;
+      const id = Number(req.params.id);
+  
+      const user = await User.updateProfile({id, ...updatedData})
+      if (!user) throw new Error ('Failed to update user profile')
+      
+      res.status(201).json(user);
+    } catch (err) {
+      console.error('Error while updating user profile: ', err);
+      res.status(404).json( { message: err.message } );
+    }
   },
   async getUser (req, res) {
     try {
       const userToken = req.user;
       if (!userToken) throw new Error ('no Token');
 
-      const user = await User.getUserData(userToken.email);
+      const user = await User.getById(userToken.id);
       if (!user) throw new Error ('couldn\'t get user');
 
       res.status(200).json(user);
@@ -82,18 +93,6 @@ const userController = {
       res.status(401).json({ message: err.message });
     }
   },
-  async updateUser (req, res) {
-
-    try {
-      const newData = req.body;
-
-      const user = await User.update(newData);
-
-      res.status(201).json(user);
-    } catch (err) {
-      console.error(err);
-    }
-  }
 };
 
 module.exports = userController;
