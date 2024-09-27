@@ -22,13 +22,20 @@ const userController = {
 
       const saltRounds = 10;
       const passwordHash = await bcrypt.hash(password, saltRounds);
-      const result = await User.create(name, email, passwordHash, phone);
-      if (!result) throw new Error ('error while saving new user');
+      const user = await User.create(name, email, passwordHash, phone);
+      if (!user) throw new Error ('error while saving new user');
 
-      res.status(201).json(result);
+      const token = createToken({id: user.id, email: user.email, role: user.role});
+
+      res.cookie('jwt_token', token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+      res.status(201).json(user);
     } catch (err) {
       console.error('Error: something went wrong: ', err);
-
       res.status(404).json({ message: err.message });
     }
   },
@@ -38,7 +45,6 @@ const userController = {
 
       const user = await User.signIn(authInputs);
       if (!user) throw new Error('Invalid email or password');
-      console.log(user);
 
       const token = createToken({ id: user.id, email: user.email, role: user.role })
 
@@ -67,13 +73,25 @@ const userController = {
       const userToken = req.user;
       if (!userToken) throw new Error ('no Token');
 
-      const user = await User.getUser(userToken.email);
+      const user = await User.getUserData(userToken.email);
       if (!user) throw new Error ('couldn\'t get user');
 
       res.status(200).json(user);
-    } catch {
+    } catch (err) {
       console.error('Error: failed to get userInfo: ', err);
-      res.status(404).json({ message: err.message });
+      res.status(401).json({ message: err.message });
+    }
+  },
+  async updateUser (req, res) {
+
+    try {
+      const newData = req.body;
+
+      const user = await User.update(newData);
+
+      res.status(201).json(user);
+    } catch (err) {
+      console.error(err);
     }
   }
 };

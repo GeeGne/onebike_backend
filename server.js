@@ -6,7 +6,7 @@ const userRoutes = require('./routes/userRoutes');
 const cookieParser = require('cookie-parser');
 
 dotenv.config();
-app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(cors({ origin: 'http://localhost:5173', credentials: true, optionSuccessStatus: 200  }));
 app.use(cookieParser());
 app.use(express.json());
 app.use('/api/v1', userRoutes);

@@ -39,7 +39,7 @@ class User  {
       return result;  
     } catch (err) {
       console.error('Error: unable to Fetch Users: ', err);
-      throw new Error('unable to fetch users');
+      throw new Error('unable to fetch users: ' + err.message);
     }
   }
 
@@ -48,23 +48,22 @@ class User  {
       const sql = 
       'INSERT INTO Users (full_name, email, password_hash, phone) VALUES (?, ?, ? ,?)';
       const [result] = await db.query(sql, [name, email, passwordHash, phone]);
-  
-      const [[newUser]] = await db.query('SELECT * FROM Users WHERE id = ?', result.insertId);
-      return newUser;
+      if (!result) throw new Error ('User wasn\'t created');
+      
+      const [[newUser]] = await db.query('SELECT * FROM Users WHERE id = ?', [result.insertId]);
+      if (!newUser) throw new Error ('error while retrieving user data');
+
+      return this.sanatizeUser(newUser);
     } catch (err) {
       console.error('Error: unable to create new user: ', err)
-      throw new Error('Error creating user')
+      throw new Error('Error creating user:' + err.message)
     }
   }
 
   static async signIn ({email, password}) {
     try {
 
-      // const sql = 'SELECT * FROM Users WHERE email = ?';
-      // const [[getUser]] = await db.query(sql, [email]);
-      // if (!getUser) throw new Error('Invalid email or password');
-
-      const user = getUser(email);
+      const user = await this.getUserData(email);
       if (!user) throw new Error('Invalid email or password');
 
       const storedHash = user.password_hash;
@@ -78,7 +77,7 @@ class User  {
     }
   }
 
-  static async getUser (email) {
+  static async getUserData (email) {
     try {
       const sql = 'SELECT * FROM Users WHERE email = ?';
       const [[getUser]] = await db.query(sql, [email]);
@@ -87,14 +86,14 @@ class User  {
       return getUser;
     } catch (err) {
       console.error('couldn\'t get user: ', err);
-      throw new Error ('counldn\'t get user: ', err.message)
+      throw new Error ('counldn\'t get user: ' + err.message)
     }
 
   }
 
   static sanatizeUser (user) {
-    const {id, full_name, email, role, is_active} = user;
-    return {id, full_name, email, role, is_active};
+    const {id, full_name, email, role, address_details, second_address, notes, is_active} = user;
+    return {id, full_name, email, role, address_details, second_address, notes, is_active};
   }
 }
 
