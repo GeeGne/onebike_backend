@@ -25,7 +25,7 @@ const userController = {
       const user = await User.create(name, email, passwordHash, phone);
       if (!user) throw new Error ('error while saving new user');
 
-      const token = createToken({id: user.id, email: user.email, role: user.role});
+      const token = createToken({ id: user.id, email: user.email, role: user.role });
 
       res.cookie('jwt_token', token, {
         httpOnly: true,
