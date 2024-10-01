@@ -22,8 +22,8 @@ function admin (req, res, next) {
 
 function me (req, res, next) {
   const { id: tokenId } = req.user;
-  const  userId = Number(req.params.id);
-
+  const  userId = req.params.id;
+  
   if (tokenId !== userId) return res.status(403).json( { message: 'Permission ungranted' });
   next();
 }
