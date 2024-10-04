@@ -6,7 +6,7 @@ const upload = require('../middlewares/uploadsMiddleware')
 //Types: products, banners, profiles;
 
 router.route('/:type/:id/:face?/:color?')
-  .post(upload.single('file'), uploadsController.Type);
+  .post(upload.single('file'), uploadsController.type);
 
 
 module.exports = router;

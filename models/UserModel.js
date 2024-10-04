@@ -48,12 +48,9 @@ class User  {
       const sql = 
       'INSERT INTO Users (full_name, email, password_hash, phone) VALUES (?, ?, ? ,?)';
       const [result] = await db.query(sql, [name, email, passwordHash, phone]);
-      if (!result) throw new Error ('User wasn\'t created');
+      if (!result.affectedRows === 0) throw new Error ('User wasn\'t created');
       
-      const [[newUser]] = await db.query('SELECT * FROM Users WHERE id = ?', [result.insertId]);
-      if (!newUser) throw new Error ('error while retrieving user data');
-
-      return this.sanatizeUser(newUser);
+      return result;    
     } catch (err) {
       console.error('Error: unable to create new user: ', err)
       throw new Error('Error creating user:' + err.message)
@@ -88,7 +85,6 @@ class User  {
       console.error('couldn\'t get user: ', err);
       throw new Error ('counldn\'t get user: ' + err.message)
     }
-
   }
 
   static async getById (id) {
@@ -97,7 +93,7 @@ class User  {
       const [[getUser]] = await db.query(sql, [id]);
       if (!getUser) throw new Error('Invalid email or password');
 
-      return getUser;
+      return this.sanatizeUser(getUser);
     } catch (err) {
       console.error('couldn\'t get user: ', err);
       throw new Error ('counldn\'t get user: ' + err.message)
@@ -109,13 +105,11 @@ class User  {
     try {
       const sql = 
       'UPDATE Users SET full_name = ?, phone = ?, address_details = ?, second_address = ?, notes = ?  WHERE id = ?';
-      const updatedUser = await db.query(sql, [full_name, phone, address_details, second_address, notes, id])
-      if (!updatedUser) throw new Error ('failed to update');
 
-      const user = await this.getById(id);
-      if (!user) throw new Error ('failed to get user profile')
+      const [result] = await db.query(sql, [full_name, phone, address_details, second_address, notes, id])
+      if (!result.affectedRows === 0) throw new Error ('failed to update');
 
-      return this.sanatizeUser(user);
+      return result;
     } catch (err) {
       console.error('Error while updating user info: ', err.message);
       throw new Error ('Error while updating user info: ' + err.message)
@@ -123,8 +117,8 @@ class User  {
   }
 
   static sanatizeUser (user) {
-    const {id, full_name, email, role, address_details, second_address, notes, is_active} = user;
-    return {id: String(id), full_name, email, role, address_details, second_address, notes, is_active};
+    const {id, full_name, phone, email, role, address_details, second_address, notes, is_active} = user;
+    return {id: String(id), full_name, phone, email, role, address_details, second_address, notes, is_active};
   }
 }
 

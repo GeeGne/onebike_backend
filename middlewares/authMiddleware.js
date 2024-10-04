@@ -13,10 +13,9 @@ function checkAuth(req, res, next) {
 }
 
 function admin (req, res, next) {
-  const user = req.user;
-  if (user.role !== 'admin' && user.role !== 'owner') {
-    return res.status(403).json({ message: 'Permission ungranted' }) ;
-  } 
+  const { role } = req.user;
+  
+  if (role !== 'admin' && role !== 'owner') return res.status(403).json({ message: 'Permission ungranted' }); 
   next();
 }
 

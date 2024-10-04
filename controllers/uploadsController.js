@@ -1,14 +1,15 @@
 const sharp = require('sharp');
 const path = require('path');
-const fsPromises = require('fs').promises;
 const fs = require('fs');
+const fsPromises = require('fs').promises;
 const pathConfig = require('../config/uploadPathConfig');
 
 const uploadsController = {
-  async Type (req, res) {
+  async type (req, res) {
     const { getPath, getName } = pathConfig;
     try {
       if (!req.file) throw new Error ('No file uploaded');
+
       // Create Upload path folder
       fs.mkdirSync(getPath(req), { recursive: true });
       
@@ -19,7 +20,7 @@ const uploadsController = {
       
       // delete the temp file
       console.log('Deleting file:', tempPath);
-      await fsPromises.unlink(tempPath)
+      // await fsPromises.unlink(tempPath)
       
       res.status(201).json({ message: 'File uploaded successfully', file: req.file });
     } catch (err) {

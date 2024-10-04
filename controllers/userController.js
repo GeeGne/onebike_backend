@@ -17,23 +17,15 @@ const userController = {
   },
   async createNewUser (req, res) {
     try {
+
       const {name, email, phone, password} = req.body;
-      if (!name || !email || !phone || !password ) throw new Error ('incorrect user format');
+      if (!name || !email || !phone || !password ) return res.status(400).json({ message: 'incorrect user format'});
 
       const saltRounds = 10;
       const passwordHash = await bcrypt.hash(password, saltRounds);
-      const user = await User.create(name, email, passwordHash, phone);
-      if (!user) throw new Error ('error while saving new user');
+      const result = await User.create(name, email, passwordHash, phone);
 
-      const token = createToken({ id: user.id, email: user.email, role: user.role });
-
-      res.cookie('jwt_token', token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'strict',
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      });
-      res.status(201).json(user);
+      res.status(201).json({ message: 'User created successfully!', result });
     } catch (err) {
       console.error('Error: something went wrong: ', err);
       res.status(404).json({ message: err.message });
@@ -55,7 +47,7 @@ const userController = {
         maxAge: 7 * 24 * 60 * 60 * 1000
       })
 
-      res.status(200).json(user);
+      res.status(200).json({ message: 'Validating password and email was successful.' });
     } catch (err) {
       console.error('Error verify has failed: ', err);
       res.status(400).json({ message: err.message });
@@ -70,10 +62,9 @@ const userController = {
       const updatedData = req.body;
       const id = Number(req.params.id);
   
-      const user = await User.updateProfile({id, ...updatedData})
-      if (!user) throw new Error ('Failed to update user profile')
+      const result = await User.updateProfile({id, ...updatedData})
       
-      res.status(201).json(user);
+      res.status(201).json({ message: 'User profile updated successfully!', result });
     } catch (err) {
       console.error('Error while updating user profile: ', err);
       res.status(404).json( { message: err.message } );
@@ -92,7 +83,7 @@ const userController = {
       console.error('Error: failed to get userInfo: ', err);
       res.status(401).json({ message: err.message });
     }
-  },
+  }
 };
 
 module.exports = userController;

@@ -9,20 +9,17 @@ router.route('/')
 router.route('/user/profile/:id')
   .put(checkAuth, me, userController.updateUserProfile);
 
-router.route('/signout')
-  .post(userController.signUserOut);
-
 router.route('/auth/me')
   .post(checkAuth, userController.getUser);
+
+router.route('/signout')
+  .post(userController.signUserOut);
 
 router.route('/signup')
   .post(userController.createNewUser);
 
 router.route('/signin')
   .post(userController.verifySignin);
-
-router.route('/signout')
-  .post(userController.signUserOut);
 
 // router.route('/user/update')
   // .post(checkAuth, userController.updateUserInfo);
