@@ -9,6 +9,7 @@ const app = express();
 const userRoutes = require('./routes/userRoutes');
 const uploadsRoutes = require('./routes/uploadsRoutes');
 const productsRoutes = require('./routes/productsRoutes');
+const bannersRoutes = require('./routes/bannersRoutes');
 
 app.use(cors({ origin: 'http://localhost:5173', credentials: true, optionSuccessStatus: 200 }));
 app.use(cookieParser());
@@ -19,6 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/v1', userRoutes);
 app.use('/api/v1/uploads', uploadsRoutes);
 app.use('/api/v1/products', productsRoutes);
+app.use('/api/v1/banners', bannersRoutes);
 
 // uploads direc
 app.use('/uploads', express.static('uploads'));
