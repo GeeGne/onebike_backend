@@ -61,8 +61,8 @@ const bannersModel = {
         WHERE id = ?
       `;
 
-      const result = await db.execute(sql, [alt, id]);
-      if (result.affectedRows > 0) throw new Error ('Couldn\'t update the banner alt.')
+      const [result] = await db.execute(sql, [alt, id]);
+      if (result.affectedRows === 0) throw new Error ('Couldn\'t update the banner alt.')
 
       return result;
     } catch (err) {
@@ -75,7 +75,7 @@ const bannersModel = {
         DELETE FROM Banners WHERE id = ?      
       `;
 
-      const result = await db.execute(sql, [id]);
+      const [result] = await db.execute(sql, [id]);
       if (result.affectedRows === 0) throw new Error ('Record doesn\'t exist or bad request.');
 
       return result;

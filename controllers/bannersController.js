@@ -22,7 +22,8 @@ const bannersController = {
   async createBanner (req, res) {
     try {
       const { order } = req.body;
-      if (!order) return res.status(400).json({ message: 'Error while creating banner: Invalid request format.' })
+      if (!order) return res.status(400).json({ message: 'Error while creating banner: Invalid request format.' });
+      
       const result = await bannersModel.create(order);
 
       res.status(201).json({ message: 'New banner is created successfully!', result });
@@ -75,7 +76,7 @@ const bannersController = {
       const { id } = req.params;
 
       const result = await bannersModel.delete(id);
-      
+
       res.status(200).json({ message: 'Banner is deleted successfully!', result })
     } catch (err) {
       console.error('Error while deleting banner: ', err);
