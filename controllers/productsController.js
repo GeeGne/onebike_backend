@@ -39,7 +39,7 @@ const productsController = {
   },
 
   // @desc update existed product
-  // @route POST api/v1/products/:id
+  // @route PUT api/v1/products/:id
   // @access private
   async updateProduct (req, res) {
     try {

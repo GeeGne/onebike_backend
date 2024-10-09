@@ -10,7 +10,9 @@
     "mongoose": "^8.6.3",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.11.3",
+    "nanoid": "^5.0.7",
     "nodemon": "^3.1.6",
+    "sequelize": "^6.37.4",
     "sharp": "^0.33.5"
   },
   "name": "onebike_backend",
@@ -24,5 +26,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "sequelize-cli": "^6.6.2"
+  }
 }

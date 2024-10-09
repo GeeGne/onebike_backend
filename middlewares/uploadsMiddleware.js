@@ -7,13 +7,13 @@ const pathConfig = require('../config/uploadPathConfig.js');
 const storage = multer.diskStorage({
   destination (req, file, cb) {
    const isTypeAllowed = pathConfig.allowedTypes.some(item => item === pathConfig.type(req));
-   if (!isTypeAllowed) return cb(new Error('Invalid upload type.'));
+   if (!isTypeAllowed) return cb(new Error('Unsupported file format.'));
 
     cb(null, pathConfig.tempPath);
   },
   filename (req, file, cb) {
-    if (!pathConfig.allowedFormats.includes(file.mimetype)) return cb(new Error ('Invalid file Type'));
-    cb(null, file.originalname);
+    if (!pathConfig.allowedFormats.includes(file.mimetype)) return cb(new Error ('Unsupported file Type'));
+    cb(null, new Date().getTime() + file.originalname);
   }
 });
 
@@ -21,7 +21,6 @@ const upload = multer({
   storage: storage,
   limits: { filesize: 5 * 1024 * 1024 }
 });
-
 
 // File filter for image types (you can customize this)
 // function fileFilter(req, file, cb) {

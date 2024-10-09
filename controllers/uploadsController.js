@@ -19,7 +19,7 @@ const uploadsController = {
       await sharp(tempPath).webp({ quality: 80 }).toFile(outputPath);
       
       // delete the temp file
-      console.log('Deleting file:', tempPath);
+      pathConfig.clearBinFolder();
       // await fsPromises.unlink(tempPath)
       
       res.status(201).json({ message: 'File uploaded successfully', file: req.file });

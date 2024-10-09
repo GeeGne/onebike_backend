@@ -8,7 +8,7 @@ const productsModel = {
       const [products] = await db.execute(sql);
       if (!products) throw new Error ('Failed to fetch products');
 
-      return products;
+      return products.map(product => ({ ...product, id: String(product.id) }));
     } catch (err) {
       throw err;
     }

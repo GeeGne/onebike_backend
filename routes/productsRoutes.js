@@ -8,7 +8,7 @@ router.route('/')
   .post(checkAuth, admin, productsController.newProduct);
 
 router.route('/:id')
-  .post(checkAuth, admin, productsController.updateProduct)
+  .put(checkAuth, admin, productsController.updateProduct)
   .delete(checkAuth, admin, productsController.deleteProduct);
 
 module.exports = router;
