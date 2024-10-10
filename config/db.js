@@ -1,5 +1,6 @@
 const mysql = require('mysql2');
 const config = require('./env');
+const { Sequelize } = require('sequelize');
 
 const db = mysql.createPool({
   host: config.dbHost,
@@ -7,5 +8,5 @@ const db = mysql.createPool({
   password: config.dbPassword,
   database: config.dbName
 }).promise();
-  
+
 module.exports = db;

@@ -1,5 +1,55 @@
 const db = require('../config/db');
 const bcrypt = require('bcrypt');
+const { sequelize, DataTypes } = require('../config/sequelize');
+
+const Users = sequelize.define('Users', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+    allowNull: false,
+  },
+  full_name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true
+  },
+  password_hash: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  phone: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  address_details: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  second_address: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  notes: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  role: {
+    type: DataTypes.ENUM('user', 'admin', 'owner'),
+    allowNull: false,
+    defaultValue: 'user'
+  },
+  city: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+},{
+  tableName: 'Users'
+});
 
 class User  {
   constructor (

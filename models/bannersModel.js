@@ -1,4 +1,25 @@
 const db = require('../config/db');
+const { sequelize, DataTypes } = require('../config/sequelize');
+
+const Banners = sequelize.define('Banners', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+    allowNull: false,
+  },
+  alt: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  order: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+},{
+  tableName: 'Banners',
+  timestamps: false
+});
 
 const bannersModel = {
   async getAll () {

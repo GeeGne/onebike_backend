@@ -1,4 +1,58 @@
 const db = require('../config/db');
+const { sequelize, DataTypes } = require('../config/sequelize');
+
+const Products = sequelize.define('Products', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true
+  }, 
+  category: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  }, 
+  type: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  }, 
+  title_en: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  }, 
+  title_ar: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  }, 
+  price: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  }, 
+  discount: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  }, 
+  state: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  }, 
+  color: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  face: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultvalue:'front'
+  },
+  brand: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  } 
+},{
+  tableName: 'Products'
+});
+
 
 const productsModel = {
   async getAll () {
