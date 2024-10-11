@@ -42,7 +42,7 @@ async function initializeDatabase() {
 
   const countSocialLinks = await SocialLinks.count();
   if (countSocialLinks === 0 && enviroment === 'production') {
-    await Users.bulkCreate([
+    await SocialLinks.bulkCreate([
       {
         email: 'Alice Johnson',
         phone: 'Alice Johnson',
