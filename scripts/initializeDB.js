@@ -4,9 +4,8 @@ const { SocialLinks } = require('../models/socialLinksModel');
 require('dotenv').config();
 console.log('rtest');
 async function initializeDatabase() {
-  await sequelize.sync(); // Make sure all models are synced with the DB
-
-  // Check if users already exist to avoid duplicates
+  await sequelize.sync(); 
+  
   const enviroment = process.env.NODE_ENV;
   if (enviroment !== 'production') return;
 
@@ -41,7 +40,7 @@ async function initializeDatabase() {
   }
 
   const countSocialLinks = await SocialLinks.count();
-  if (countSocialLinks === 0 && enviroment === 'production') {
+  if (countSocialLinks === 0 ) {
     await SocialLinks.bulkCreate([
       {
         email: 'Alice Johnson',

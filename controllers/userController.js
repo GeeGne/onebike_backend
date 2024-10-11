@@ -42,9 +42,8 @@ const userController = {
 
       res.cookie('jwt_token', token, {
         httpOnly: true,
-        // secure: true,
-        secure: false,
-        sameSite: 'None',
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
         maxAge: 7 * 24 * 60 * 60 * 1000
       })
 

@@ -29,7 +29,7 @@ app.use('/api/v1/socialLinks', socialLinksRoutes);
 app.use('/uploads', express.static('uploads'));
 
 // Add some records
-initializeDatabase().catch(console.error);
+// initializeDatabase().catch(console.error);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log('Server is running on port : ', port));

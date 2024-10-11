@@ -10,7 +10,7 @@ router.route('/user/profile/:id')
   .put(checkAuth, me, userController.updateUserProfile);
 
 router.route('/auth/me')
-  .post(checkAuth, userController.getUser);
+  .get(checkAuth, userController.getUser);
 
 router.route('/signout')
   .post(userController.signUserOut);

@@ -120,7 +120,7 @@ class User  {
       return this.sanatizeUser(user);
     } catch (err) {
       console.error('coudln\'t verify user: ', err);
-      throw new Error ('Error verifying user: ' + err.message);
+      throw err;
     }
   }
 
@@ -133,7 +133,7 @@ class User  {
       return getUser;
     } catch (err) {
       console.error('couldn\'t get user: ', err);
-      throw new Error ('counldn\'t get user: ' + err.message)
+      throw err;
     }
   }
 
@@ -172,4 +172,4 @@ class User  {
   }
 }
 
-module.exports = { User, Users};
+module.exports = { User, Users };
