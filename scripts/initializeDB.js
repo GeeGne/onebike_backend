@@ -1,7 +1,7 @@
 const { sequelize } = require('../config/sequelize');
-const Users = require('../models/Users');
+const { Users } = require('../models/UserModel');
 require('dotenv').config();
-
+console.log('rtest');
 async function initializeDatabase() {
   await sequelize.sync(); // Make sure all models are synced with the DB
 
@@ -39,4 +39,4 @@ async function initializeDatabase() {
   }
 }
 
-initializeDatabase().catch(console.error);
+module.exports = initializeDatabase

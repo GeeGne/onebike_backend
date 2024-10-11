@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv').config();
+const initializeDatabase = require('./scripts/initializeDB')
 
 const app = express();
 
@@ -25,8 +26,11 @@ app.use('/api/v1/products', productsRoutes);
 app.use('/api/v1/banners', bannersRoutes);
 app.use('/api/v1/socialLinks', socialLinksRoutes);
 
-// uploads direc
+// Uploads direc
 app.use('/uploads', express.static('uploads'));
+
+// Add some records
+initializeDatabase().catch(console.error);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log('Server is running on port : ', port));
