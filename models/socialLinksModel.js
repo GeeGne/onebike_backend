@@ -1,4 +1,36 @@
 const db = require('../config/db');
+const { sequelize, DataTypes } = require('../config/sequelize');
+
+const SocialLinks = sequelize.define('SocialLinks', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  phone: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  facebook: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  instagram: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  whatsApp: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  }
+},{
+  tableName: 'SocialLinks'
+});
 
 const socialLinksModel = {
   async get () {
@@ -32,4 +64,4 @@ const socialLinksModel = {
   }
 }
 
-module.exports = socialLinksModel;
+module.exports = { socialLinksModel, SocialLinks};

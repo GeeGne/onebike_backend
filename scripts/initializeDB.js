@@ -1,5 +1,6 @@
 const { sequelize } = require('../config/sequelize');
 const { Users } = require('../models/UserModel');
+const { SocialLinks } = require('../models/socialLinksModel');
 require('dotenv').config();
 console.log('rtest');
 async function initializeDatabase() {
@@ -7,8 +8,10 @@ async function initializeDatabase() {
 
   // Check if users already exist to avoid duplicates
   const enviroment = process.env.NODE_ENV;
-  const count = await Users.count();
-  if (count === 0 && enviroment === 'production') {
+  if (enviroment !== 'production') return;
+
+  const countUsers = await Users.count();
+  if (countUsers === 0 ) {
     await Users.bulkCreate([
       {
         full_name: 'Alice Johnson',
@@ -33,9 +36,23 @@ async function initializeDatabase() {
         city: 'San Francisco'
       }
     ]);
+    
     console.log('Default users added to the database.');
-  } else {
-    console.log('Users already exist in the database.');
+  }
+
+  const countSocialLinks = await SocialLinks.count();
+  if (countSocialLinks === 0 && enviroment === 'production') {
+    await Users.bulkCreate([
+      {
+        email: 'Alice Johnson',
+        phone: 'Alice Johnson',
+        facebook: 'Alice Johnson',
+        intagram: 'Alice Johnson',
+        whatsapp: 'Alice Johnson',
+      }
+    ]);
+
+    console.log('Default users added to the database.');
   }
 }
 

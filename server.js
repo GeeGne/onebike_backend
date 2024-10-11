@@ -13,7 +13,6 @@ const productsRoutes = require('./routes/productsRoutes');
 const bannersRoutes = require('./routes/bannersRoutes');
 const socialLinksRoutes = require('./routes/socialLinksRoutes');
 
-// app.use(cors({ origin: 'http://192.168.1.5:5173', credentials: true, optionSuccessStatus: 200 }));
 app.use(cors({ origin: process.env.FRONTEND_URI, credentials: true, optionSuccessStatus: 200 }));
 app.use(cookieParser());
 app.use(express.json());

@@ -1,4 +1,4 @@
-const socialLinksModel = require('../models/socialLinksModel');
+const { socialLinksModel } = require('../models/socialLinksModel');
 
 const socialLinksController = {
   
