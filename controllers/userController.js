@@ -25,6 +25,15 @@ const userController = {
       const passwordHash = await bcrypt.hash(password, saltRounds);
       const result = await User.create(name, email, passwordHash, phone);
 
+      const token = createToken({ id: result.insertId, email, role: 'user' })
+
+      res.cookie('jwt_token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000
+      })
+
       res.status(201).json({ message: 'User created successfully!', result });
     } catch (err) {
       console.error('Error: something went wrong: ', err);
