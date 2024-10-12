@@ -2,10 +2,10 @@ const { sequelize } = require('../config/sequelize');
 const { Users } = require('../models/UserModel');
 const { SocialLinks } = require('../models/socialLinksModel');
 require('dotenv').config();
-console.log('rtest');
+
 async function initializeDatabase() {
   await sequelize.sync(); 
-  
+
   const enviroment = process.env.NODE_ENV;
   if (enviroment !== 'production') return;
 
