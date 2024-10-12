@@ -30,7 +30,8 @@ const userController = {
       res.cookie('jwt_token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+        sameSite: 'Lax',
+        path: '/',
         maxAge: 7 * 24 * 60 * 60 * 1000
       })
 
@@ -47,12 +48,12 @@ const userController = {
       const user = await User.signIn(authInputs);
       if (!user) throw new Error('Invalid email or password');
 
-      const token = createToken({ id: user.id, email: user.email, role: user.role })
-
+      const token = createToken({ id: user.id, email: user.email, role: user.role });
       res.cookie('jwt_token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+        sameSite: 'Lax',
+        path: '/',
         maxAge: 7 * 24 * 60 * 60 * 1000
       })
 
