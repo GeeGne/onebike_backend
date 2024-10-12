@@ -64,7 +64,12 @@ const userController = {
     }
   },
   async signUserOut (req, res) {
-    res.clearCookie('jwt_token');
+    res.clearCookie('jwt_token', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'None',
+      path: '/'
+    });
     res.status(200).json({ message: 'Cookie removed' })
   },
   async updateUserProfile (req, res) {
